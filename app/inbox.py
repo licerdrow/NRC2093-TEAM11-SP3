@@ -18,10 +18,10 @@ def getDB():
 def show():
     db =  get_db()
     messages = db.execute(
-        QUERY
+        'SELECT * FROM message'
     ).fetchall()
 
-    return render_template(TEMP, messages=messages)
+    return render_template('inbox/show.html', messages=messages)
 
 
 @bp.route('/send', methods=('GET', 'POST'))
@@ -29,7 +29,7 @@ def show():
 def send():
     if request.method == 'POST':        
         from_id = g.user['id']
-        to_username =  request.form['to_username']
+        to_username =  request.form['to']
         subject =  request.form['subject']
         body =  request.form['body']
 
@@ -37,7 +37,7 @@ def send():
        
         if not to_username:
             flash('To field is required')
-            return render_template(TEMP)
+            return render_template('inbox/send.html')
         
         if  not subject:
             flash('Subject field is required')
@@ -45,13 +45,13 @@ def send():
         
         if  not body:
             flash('Body field is required')
-            return render_template(TEMP)    
+            return render_template('inbox/send.html')    
         
         error = None    
         userto = None 
         
         userto = db.execute(
-            QUERY, (to_username,)
+            'SELECT * FROM user WHERE username = ?', (to_username,)
         ).fetchone()
         
         if userto is None:
@@ -60,9 +60,8 @@ def send():
         if error is not None:
             flash(error)
         else:
-            db =    get_db()
             db.execute(
-                QUERY,
+                'INSERT INTO message (from_id, to_id, subject, body) VALUES (?, ?, ?, ?)',
                 (g.user['id'], userto['id'], subject, body)
             )
             db.commit()
