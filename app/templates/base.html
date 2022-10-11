@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="bg-slate-900">
+<html class="bg-gray-800">
   <head>
     <title>{% block title %}{% endblock %} - Myapp</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
@@ -7,7 +7,9 @@
   </head>
   <body class="max-w-lg mx-auto rounded-md">
     <nav class="rounded-t-md prose">
-      <h1 class="m-0 ml-1">Demo</h1>
+      <!-- <h1 class="m-0 ml-1">ChatApp
+      </h1> -->
+      <img src="../static/Img/Logo.png" alt="" class="logo">
       <ul class="m-0">
         {% if g.user %}
           <li><span>{{ g.user['username'] }}</span>
