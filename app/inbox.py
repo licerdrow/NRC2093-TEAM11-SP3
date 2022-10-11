@@ -18,8 +18,7 @@ def getDB():
 def show():
     db =  get_db()
     userId = g.user['id']
-    messages = db.execute(
-        
+    messages = db.execute(    
     'Select * From message Where from_id = ? or to_id = ?',(userId, userId)
     ).fetchall()
 
